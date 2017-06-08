@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-  `username` varchar(20) NOT NULL,
+  `username` varchar(20) NOT NULL UNIQUE ,
   `password` varchar(20) NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`username`)
@@ -45,9 +45,9 @@ INSERT INTO users(username,password,enabled) VALUES ('user2','user2pass', true);
 INSERT INTO user_roles (username, role) VALUES ('user1', 'ROLE_USER');
 INSERT INTO user_roles (username, role) VALUES ('user2', 'ROLE_USER');
 
-INSERT INTO todolists (name,user_username) VALUES ('List 1', 'user1');
-INSERT INTO todolists (name,user_username) VALUES ('List 2', 'user1');
-INSERT INTO todolists (name,user_username) VALUES ('List 3', 'user2');
+INSERT INTO todolists (id,name,user_username) VALUES (1,'List 1', 'user1');
+INSERT INTO todolists (id,name,user_username) VALUES (2,'List 2', 'user1');
+INSERT INTO todolists (id,name,user_username) VALUES (3,'List 3', 'user2');
 
 INSERT INTO todos (completed,description,list_id) VALUES (false, 'Do a thing', 1);
 INSERT INTO todos (completed,description,list_id) VALUES (true, 'Do another thing', 1);

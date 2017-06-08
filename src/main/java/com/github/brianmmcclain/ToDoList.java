@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.security.Principal;
 import java.util.List;
 
-@RestController
 @Entity
 @Table(name = "todolists")
 public class ToDoList {
@@ -28,6 +27,17 @@ public class ToDoList {
     @Autowired
     @Transient
     ToDoRepository todoRepo;
+
+    public String getName() {
+        return name;
+    }
+
+    public ToDoList() {}
+
+    public ToDoList(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
