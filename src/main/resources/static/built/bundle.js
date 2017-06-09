@@ -75,8 +75,8 @@
 	        value: function componentDidMount() {
 	            var _this2 = this;
 	
-	            client({ method: 'GET', path: '/api/toDoLists' }).done(function (response) {
-	                _this2.setState({ lists: response.entity._embedded.toDoLists });
+	            client({ method: 'GET', path: '/api/lists' }).done(function (response) {
+	                _this2.setState({ lists: response.entity });
 	            });
 	        }
 	    }, {
@@ -102,7 +102,7 @@
 	        key: 'render',
 	        value: function render() {
 	            var lists = this.props.lists.map(function (list) {
-	                return React.createElement(ToDoList, { key: list._links.self.href, list: list });
+	                return React.createElement(ToDoList, { key: list.id, list: list });
 	            });
 	            return React.createElement(
 	                'div',
@@ -150,7 +150,11 @@
 	                React.createElement(
 	                    'td',
 	                    null,
-	                    this.props.list.name
+	                    React.createElement(
+	                        'a',
+	                        { href: "/lists/" + this.props.list.id },
+	                        this.props.list.name
+	                    )
 	                )
 	            );
 	        }

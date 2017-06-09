@@ -10,8 +10,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        client({method: 'GET', path: '/api/toDoLists'}).done(response => {
-            this.setState({lists: response.entity._embedded.toDoLists});
+        client({method: 'GET', path: '/api/lists'}).done(response => {
+            this.setState({lists: response.entity});
     });
     }
 
@@ -25,7 +25,7 @@ class App extends React.Component {
 class ToDoListList extends React.Component{
     render() {
         var lists = this.props.lists.map(list =>
-            <ToDoList key={list._links.self.href} list={list}/>
+            <ToDoList key={list.id} list={list}/>
     );
         return (
             <div className="container">
@@ -46,7 +46,7 @@ class ToDoList extends React.Component{
     render() {
         return (
             <tr>
-            <td>{this.props.list.name}</td>
+            <td><a href={"/lists/" + this.props.list.id}>{this.props.list.name}</a></td>
         </tr>
     )
     }
