@@ -14,8 +14,8 @@ public class ToDo {
     private long id;
     private String description;
     private boolean completed = false;
-    @OneToMany
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "list_id")
     private ToDoList list;
 
     public ToDo() {}
