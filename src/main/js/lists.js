@@ -26,28 +26,28 @@ class ToDoListList extends React.Component{
     render() {
         var lists = this.props.lists.map(list =>
             <ToDoList key={list.id} list={list}/>
-    );
+        );
         return (
-            <div className="container">
-            <table className="table table-striped">
-                <tbody>
-                    <tr>
-                        <th>Name</th>
-                    </tr>
-                    {lists}
-                </tbody>
-            </table>
-            </div>
-    )
+            <div>{lists}</div>
+        )
     }
 }
 
 class ToDoList extends React.Component{
     render() {
         return (
-            <tr>
-            <td>{this.props.list.name}</td>
-        </tr>
+            <div className="container">
+                <h1>{this.props.list.name}</h1>
+                <table className="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Completed</th>
+                            <th>Description</th>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
     )
     }
 }

@@ -106,25 +106,8 @@
 	            });
 	            return React.createElement(
 	                'div',
-	                { className: 'container' },
-	                React.createElement(
-	                    'table',
-	                    { className: 'table table-striped' },
-	                    React.createElement(
-	                        'tbody',
-	                        null,
-	                        React.createElement(
-	                            'tr',
-	                            null,
-	                            React.createElement(
-	                                'th',
-	                                null,
-	                                'Name'
-	                            )
-	                        ),
-	                        lists
-	                    )
-	                )
+	                null,
+	                lists
 	            );
 	        }
 	    }]);
@@ -145,15 +128,33 @@
 	        key: 'render',
 	        value: function render() {
 	            return React.createElement(
-	                'tr',
-	                null,
+	                'div',
+	                { className: 'container' },
 	                React.createElement(
-	                    'td',
+	                    'h1',
 	                    null,
+	                    this.props.list.name
+	                ),
+	                React.createElement(
+	                    'table',
+	                    { className: 'table table-striped' },
 	                    React.createElement(
-	                        'a',
-	                        { href: "/lists/" + this.props.list.id },
-	                        this.props.list.name
+	                        'tbody',
+	                        null,
+	                        React.createElement(
+	                            'tr',
+	                            null,
+	                            React.createElement(
+	                                'th',
+	                                null,
+	                                'Completed'
+	                            ),
+	                            React.createElement(
+	                                'th',
+	                                null,
+	                                'Description'
+	                            )
+	                        )
 	                    )
 	                )
 	            );
