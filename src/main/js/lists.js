@@ -46,7 +46,7 @@ class ToDoList extends React.Component{
     render() {
         return (
             <tr>
-            <td><a href={"/lists/" + this.props.list.id}>{this.props.list.name}</a></td>
+            <td>{this.props.list.name}</td>
         </tr>
     )
     }
