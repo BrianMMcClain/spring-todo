@@ -127,6 +127,9 @@
 	    _createClass(ToDoList, [{
 	        key: 'render',
 	        value: function render() {
+	            var todos = this.props.list.toDos.map(function (todo) {
+	                return React.createElement(ToDo, { key: todo.id, todo: todo });
+	            });
 	            return React.createElement(
 	                'div',
 	                { className: 'container' },
@@ -154,7 +157,8 @@
 	                                null,
 	                                'Description'
 	                            )
-	                        )
+	                        ),
+	                        todos
 	                    )
 	                )
 	            );
@@ -162,6 +166,40 @@
 	    }]);
 	
 	    return ToDoList;
+	}(React.Component);
+	
+	var ToDo = function (_React$Component4) {
+	    _inherits(ToDo, _React$Component4);
+	
+	    function ToDo() {
+	        _classCallCheck(this, ToDo);
+	
+	        return _possibleConstructorReturn(this, (ToDo.__proto__ || Object.getPrototypeOf(ToDo)).apply(this, arguments));
+	    }
+	
+	    _createClass(ToDo, [{
+	        key: 'render',
+	        value: function render() {
+	            return React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    ' ',
+	                    React.createElement('input', { type: 'checkbox', name: this.props.todo.id + "_completed", value: '' }),
+	                    ' '
+	                ),
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    this.props.todo.description
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return ToDo;
 	}(React.Component);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('react'));

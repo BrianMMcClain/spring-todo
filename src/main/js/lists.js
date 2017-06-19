@@ -33,8 +33,11 @@ class ToDoListList extends React.Component{
     }
 }
 
-class ToDoList extends React.Component{
+class ToDoList extends React.Component {
     render() {
+        var todos = this.props.list.toDos.map(todo =>
+                <ToDo key={todo.id} todo={todo}/>
+        );
         return (
             <div className="container">
                 <h1>{this.props.list.name}</h1>
@@ -44,11 +47,22 @@ class ToDoList extends React.Component{
                             <th>Completed</th>
                             <th>Description</th>
                         </tr>
-
+                        {todos}
                     </tbody>
                 </table>
             </div>
     )
+    }
+}
+
+class ToDo extends React.Component {
+    render() {
+        return (
+            <tr>
+                <td> <input type="checkbox" name={this.props.todo.id + "_completed"} value="" /> </td>
+                <td>{this.props.todo.description}</td>
+            </tr>
+        )
     }
 }
 

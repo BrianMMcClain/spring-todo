@@ -32,4 +32,6 @@ public class ToDo {
     public String getDescription() {
         return this.description;
     }
+
+    public long getId() { return this.id; }
 }

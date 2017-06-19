@@ -52,3 +52,6 @@ INSERT INTO todolists (id,name,user_username) VALUES (3,'List 3', 'user2');
 INSERT INTO todos (completed,description,list_id) VALUES (false, 'Do a thing', 1);
 INSERT INTO todos (completed,description,list_id) VALUES (true, 'Do another thing', 1);
 INSERT INTO todos (completed,description,list_id) VALUES (false, 'Do all the things', 1);
+
+INSERT INTO todos (completed,description,list_id) VALUES (false, 'Do a thing in the other list', 2);
+INSERT INTO todos (completed,description,list_id) VALUES (true, 'Do another thing in the other list', 2);
