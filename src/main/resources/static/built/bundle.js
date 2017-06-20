@@ -187,7 +187,7 @@
 	                    'td',
 	                    null,
 	                    ' ',
-	                    React.createElement('input', { type: 'checkbox', name: this.props.todo.id + "_completed", value: '' }),
+	                    React.createElement('input', { type: 'checkbox', name: this.props.todo.id + "_completed", value: '', defaultChecked: this.props.todo.completed }),
 	                    ' '
 	                ),
 	                React.createElement(

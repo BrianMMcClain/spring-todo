@@ -59,7 +59,7 @@ class ToDo extends React.Component {
     render() {
         return (
             <tr>
-                <td> <input type="checkbox" name={this.props.todo.id + "_completed"} value="" /> </td>
+                <td> <input type="checkbox" name={this.props.todo.id + "_completed"} value="" defaultChecked={this.props.todo.completed } /> </td>
                 <td>{this.props.todo.description}</td>
             </tr>
         )
