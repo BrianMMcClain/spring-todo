@@ -14,7 +14,7 @@ public class ToDo {
     private long id;
     private String description;
     private boolean completed = false;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "list_id")
     private ToDoList list;
 
@@ -34,4 +34,6 @@ public class ToDo {
     }
 
     public long getId() { return this.id; }
+
+    public User getOwner() { return this.list.getUser(); }
 }

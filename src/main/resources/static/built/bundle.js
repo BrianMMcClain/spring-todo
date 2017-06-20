@@ -156,7 +156,8 @@
 	                                'th',
 	                                null,
 	                                'Description'
-	                            )
+	                            ),
+	                            React.createElement('th', null)
 	                        ),
 	                        todos
 	                    )
@@ -180,6 +181,8 @@
 	    _createClass(ToDo, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this6 = this;
+	
 	            return React.createElement(
 	                'tr',
 	                null,
@@ -194,6 +197,17 @@
 	                    'td',
 	                    null,
 	                    this.props.todo.description
+	                ),
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    React.createElement(
+	                        'button',
+	                        { key: this.props.todo.id, type: 'button', className: 'btn btn-danger', onClick: function onClick() {
+	                                deleteTodo(_this6.props.todo);
+	                            } },
+	                        'Delete'
+	                    )
 	                )
 	            );
 	        }
@@ -203,6 +217,12 @@
 	}(React.Component);
 	
 	ReactDOM.render(React.createElement(App, null), document.getElementById('react'));
+	
+	function deleteTodo(todo) {
+	    client({ method: 'DELETE', path: "/api/todos/" + todo.id }).done(function (response) {
+	        console.log(response.entity);
+	    });
+	}
 
 /***/ }),
 /* 1 */

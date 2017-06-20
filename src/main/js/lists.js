@@ -46,6 +46,7 @@ class ToDoList extends React.Component {
                         <tr>
                             <th>Completed</th>
                             <th>Description</th>
+                            <th></th>
                         </tr>
                         {todos}
                     </tbody>
@@ -61,12 +62,19 @@ class ToDo extends React.Component {
             <tr>
                 <td> <input type="checkbox" name={this.props.todo.id + "_completed"} value="" defaultChecked={this.props.todo.completed } /> </td>
                 <td>{this.props.todo.description}</td>
+                <td><button key={this.props.todo.id} type="button" className="btn btn-danger" onClick={() => {deleteTodo(this.props.todo)}}>Delete</button></td>
             </tr>
         )
-    }
+    };
 }
 
 ReactDOM.render(
     <App />,
     document.getElementById('react')
 )
+
+function deleteTodo(todo) {
+    client({method: 'DELETE', path: "/api/todos/" + todo.id}).done(response => {
+        console.log(response.entity);
+    });
+}
