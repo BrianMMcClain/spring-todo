@@ -42,7 +42,7 @@ public class ToDoController {
             todoRepo.delete(todo);
             return new ResponseEntity(HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
 

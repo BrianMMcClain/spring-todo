@@ -67,12 +67,14 @@
 	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 	
 	        _this.state = { lists: [] };
+	        _this.loadState = _this.loadState.bind(_this);
+	        _this.deleteToDo = _this.deleteToDo.bind(_this);
 	        return _this;
 	    }
 	
 	    _createClass(App, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
+	        key: 'loadState',
+	        value: function loadState() {
 	            var _this2 = this;
 	
 	            client({ method: 'GET', path: '/api/lists' }).done(function (response) {
@@ -80,9 +82,23 @@
 	            });
 	        }
 	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.loadState();
+	        }
+	    }, {
+	        key: 'deleteToDo',
+	        value: function deleteToDo(e) {
+	            client({ method: 'DELETE', path: "/api/todos/" + e.target.value }).done(function (response) {
+	                console.log(response.entity);
+	            });
+	
+	            this.loadState();
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return React.createElement(ToDoListList, { lists: this.state.lists });
+	            return React.createElement(ToDoListList, { lists: this.state.lists, deleteToDo: this.deleteToDo });
 	        }
 	    }]);
 	
@@ -101,8 +117,10 @@
 	    _createClass(ToDoListList, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this4 = this;
+	
 	            var lists = this.props.lists.map(function (list) {
-	                return React.createElement(ToDoList, { key: list.id, list: list });
+	                return React.createElement(ToDoList, { key: list.id, list: list, deleteToDo: _this4.props.deleteToDo });
 	            });
 	            return React.createElement(
 	                'div',
@@ -115,114 +133,90 @@
 	    return ToDoListList;
 	}(React.Component);
 	
-	var ToDoList = function (_React$Component3) {
-	    _inherits(ToDoList, _React$Component3);
+	var ToDoList = React.createClass({
+	    displayName: 'ToDoList',
+	    render: function render() {
+	        var _this5 = this;
 	
-	    function ToDoList() {
-	        _classCallCheck(this, ToDoList);
-	
-	        return _possibleConstructorReturn(this, (ToDoList.__proto__ || Object.getPrototypeOf(ToDoList)).apply(this, arguments));
-	    }
-	
-	    _createClass(ToDoList, [{
-	        key: 'render',
-	        value: function render() {
-	            var todos = this.props.list.toDos.map(function (todo) {
-	                return React.createElement(ToDo, { key: todo.id, todo: todo });
-	            });
-	            return React.createElement(
-	                'div',
-	                { className: 'container' },
+	        var todos = this.props.list.toDos.map(function (todo) {
+	            return React.createElement(ToDo, { key: todo.id, todo: todo, deleteToDo: _this5.props.deleteToDo });
+	        });
+	        return React.createElement(
+	            'div',
+	            { className: 'container' },
+	            React.createElement(
+	                'h1',
+	                null,
+	                this.props.list.name
+	            ),
+	            React.createElement(
+	                'table',
+	                { className: 'table table-striped' },
 	                React.createElement(
-	                    'h1',
+	                    'tbody',
 	                    null,
-	                    this.props.list.name
-	                ),
-	                React.createElement(
-	                    'table',
-	                    { className: 'table table-striped' },
 	                    React.createElement(
-	                        'tbody',
+	                        'tr',
 	                        null,
 	                        React.createElement(
-	                            'tr',
+	                            'th',
 	                            null,
-	                            React.createElement(
-	                                'th',
-	                                null,
-	                                'Completed'
-	                            ),
-	                            React.createElement(
-	                                'th',
-	                                null,
-	                                'Description'
-	                            ),
-	                            React.createElement('th', null)
+	                            'Completed'
 	                        ),
-	                        todos
-	                    )
+	                        React.createElement(
+	                            'th',
+	                            null,
+	                            'Description'
+	                        ),
+	                        React.createElement('th', null)
+	                    ),
+	                    todos
 	                )
-	            );
-	        }
-	    }]);
-	
-	    return ToDoList;
-	}(React.Component);
-	
-	var ToDo = function (_React$Component4) {
-	    _inherits(ToDo, _React$Component4);
-	
-	    function ToDo() {
-	        _classCallCheck(this, ToDo);
-	
-	        return _possibleConstructorReturn(this, (ToDo.__proto__ || Object.getPrototypeOf(ToDo)).apply(this, arguments));
+	            )
+	        );
 	    }
+	});
 	
-	    _createClass(ToDo, [{
-	        key: 'render',
-	        value: function render() {
-	            var _this6 = this;
-	
-	            return React.createElement(
-	                'tr',
+	var ToDo = React.createClass({
+	    displayName: 'ToDo',
+	    render: function render() {
+	        return React.createElement(
+	            'tr',
+	            null,
+	            React.createElement(
+	                'td',
+	                null,
+	                ' ',
+	                React.createElement('input', { type: 'checkbox', name: this.props.todo.id + "_completed", value: '', defaultChecked: this.props.todo.completed }),
+	                ' '
+	            ),
+	            React.createElement(
+	                'td',
+	                null,
+	                this.props.todo.description
+	            ),
+	            React.createElement(
+	                'td',
 	                null,
 	                React.createElement(
-	                    'td',
-	                    null,
-	                    ' ',
-	                    React.createElement('input', { type: 'checkbox', name: this.props.todo.id + "_completed", value: '', defaultChecked: this.props.todo.completed }),
-	                    ' '
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    this.props.todo.description
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    React.createElement(
-	                        'button',
-	                        { key: this.props.todo.id, type: 'button', className: 'btn btn-danger', onClick: function onClick() {
-	                                deleteTodo(_this6.props.todo);
-	                            } },
-	                        'Delete'
-	                    )
+	                    'button',
+	                    { key: this.props.todo.id, value: this.props.todo.id, type: 'button', className: 'btn btn-danger', onClick: this.props.deleteToDo },
+	                    'Delete'
 	                )
-	            );
-	        }
-	    }]);
+	            )
+	        );
+	    }
+	});
 	
-	    return ToDo;
-	}(React.Component);
+	ReactDOM.render(React.createElement(App, null), document.getElementById('react')
 	
-	ReactDOM.render(React.createElement(App, null), document.getElementById('react'));
-	
-	function deleteTodo(todo) {
-	    client({ method: 'DELETE', path: "/api/todos/" + todo.id }).done(function (response) {
-	        console.log(response.entity);
-	    });
-	}
+	// function deleteTodo(todo) {
+	//     client({method: 'DELETE', path: "/api/todos/" + todo.id}).done(response => {
+	//         console.log(response.entity);
+	//     });
+	//     console.log(this.state)
+	// }
+	);
 
 /***/ }),
 /* 1 */
