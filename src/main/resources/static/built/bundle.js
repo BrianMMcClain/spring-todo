@@ -69,6 +69,7 @@
 	        _this.state = { lists: [] };
 	        _this.loadState = _this.loadState.bind(_this);
 	        _this.deleteToDo = _this.deleteToDo.bind(_this);
+	        _this.deleteList = _this.deleteList.bind(_this);
 	        return _this;
 	    }
 	
@@ -96,9 +97,18 @@
 	            this.loadState();
 	        }
 	    }, {
+	        key: 'deleteList',
+	        value: function deleteList(e) {
+	            client({ method: 'DELETE', path: "/api/lists/" + e.target.value }).done(function (response) {
+	                console.log(response.entity);
+	            });
+	
+	            this.loadState();
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return React.createElement(ToDoListList, { lists: this.state.lists, deleteToDo: this.deleteToDo });
+	            return React.createElement(ToDoListList, { lists: this.state.lists, deleteToDo: this.deleteToDo, deleteList: this.deleteList });
 	        }
 	    }]);
 	
@@ -120,7 +130,7 @@
 	            var _this4 = this;
 	
 	            var lists = this.props.lists.map(function (list) {
-	                return React.createElement(ToDoList, { key: list.id, list: list, deleteToDo: _this4.props.deleteToDo });
+	                return React.createElement(ToDoList, { key: list.id, list: list, deleteToDo: _this4.props.deleteToDo, deleteList: _this4.props.deleteList });
 	            });
 	            return React.createElement(
 	                'div',
@@ -141,6 +151,7 @@
 	        var todos = this.props.list.toDos.map(function (todo) {
 	            return React.createElement(ToDo, { key: todo.id, todo: todo, deleteToDo: _this5.props.deleteToDo });
 	        });
+	        console.log(this.props);
 	        return React.createElement(
 	            'div',
 	            { className: 'container' },
@@ -148,6 +159,11 @@
 	                'h1',
 	                null,
 	                this.props.list.name
+	            ),
+	            React.createElement(
+	                'button',
+	                { key: this.props.list.id, value: this.props.list.id, type: 'button', className: 'btn btn-danger', onClick: this.props.deleteList },
+	                'Delete'
 	            ),
 	            React.createElement(
 	                'table',

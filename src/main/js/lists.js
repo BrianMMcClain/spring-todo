@@ -9,6 +9,7 @@ class App extends React.Component {
         this.state = {lists: []};
         this.loadState = this.loadState.bind(this);
         this.deleteToDo = this.deleteToDo.bind(this);
+        this.deleteList = this.deleteList.bind(this);
     }
 
     loadState() {
@@ -29,9 +30,17 @@ class App extends React.Component {
         this.loadState();
     }
 
+    deleteList(e) {
+        client({method: 'DELETE', path: "/api/lists/" + e.target.value}).done(response => {
+            console.log(response.entity);
+        });
+
+        this.loadState();
+    }
+
     render() {
         return (
-            <ToDoListList lists={this.state.lists} deleteToDo={this.deleteToDo} />
+            <ToDoListList lists={this.state.lists} deleteToDo={this.deleteToDo} deleteList={this.deleteList} />
     )
     }
 }
@@ -39,7 +48,7 @@ class App extends React.Component {
 class ToDoListList extends React.Component{
     render() {
         var lists = this.props.lists.map(list =>
-            <ToDoList key={list.id} list={list} deleteToDo={this.props.deleteToDo} />
+            <ToDoList key={list.id} list={list} deleteToDo={this.props.deleteToDo} deleteList={this.props.deleteList} />
         );
         return (
             <div>{lists}</div>
@@ -52,9 +61,11 @@ var ToDoList = React.createClass({
         var todos = this.props.list.toDos.map(todo =>
                 <ToDo key={todo.id} todo={todo} deleteToDo={this.props.deleteToDo} />
         );
+        console.log(this.props);
         return (
             <div className="container">
                 <h1>{this.props.list.name}</h1>
+                <button key={this.props.list.id} value={this.props.list.id} type="button" className="btn btn-danger" onClick={this.props.deleteList}>Delete</button>
                 <table className="table table-striped">
                     <tbody>
                         <tr>

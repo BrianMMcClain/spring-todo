@@ -11,7 +11,7 @@ public class ToDoList {
     @GeneratedValue
     private long id;
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User user;
     @OneToMany(mappedBy = "list", cascade = CascadeType.ALL)
     private List<ToDo> todos;

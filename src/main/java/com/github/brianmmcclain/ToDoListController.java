@@ -3,6 +3,7 @@ package com.github.brianmmcclain;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,16 +32,37 @@ public class ToDoListController {
 
     @RequestMapping(value = "/api/lists/{id}", method = RequestMethod.GET)
     public @ResponseBody List<ToDo> showList(@PathVariable("id") long id, Principal principal) {
-        String username = principal.getName();
         ToDoList list = listRepo.findById(id);
 
-        if (list == null || !list.getUser().getUsername().equals(username)) {
+        if (isAuthorized(list, principal)) {
+            List<ToDo> todos = todoRepo.findByListId(list.getId());
+            return todos;
+        } else {
             return null;
         }
+    }
 
-        List<ToDo> todos = todoRepo.findByListId(list.getId());
+    @RequestMapping(value = "/api/lists/{id}", method = RequestMethod.DELETE)
+    public @ResponseBody ResponseEntity deleteList(@PathVariable("id") long id, Principal principal) {
+        ToDoList list = listRepo.findById(id);
+        if (isAuthorized(list, principal)) {
+            List<ToDo> todos = todoRepo.findByListId(list.getId());
+            for (ToDo todo : todos) {
+                todoRepo.delete(todo);
+            }
+            listRepo.delete(list);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
 
-        return todos;
-
+    private boolean isAuthorized(ToDoList list, Principal principal) {
+        String username = principal.getName();
+        if (list == null || !list.getUser().getUsername().equals(username)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
