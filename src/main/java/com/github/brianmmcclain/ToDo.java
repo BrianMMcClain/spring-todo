@@ -29,9 +29,13 @@ public class ToDo {
         return this.completed;
     }
 
+    public void setCompleted(boolean completed) { this.completed = completed; }
+
     public String getDescription() {
         return this.description;
     }
+
+    public void setDescription(String description) { this.description = description; }
 
     public long getId() { return this.id; }
 
