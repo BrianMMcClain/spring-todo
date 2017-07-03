@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Transient;
 import java.security.Principal;
@@ -40,6 +37,18 @@ public class ToDoController {
         ToDo todo = todoRepo.findById(id);
         if (isAuthorized(todo, principal)) {
             todoRepo.delete(todo);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @RequestMapping(value = "/api/todos/{id}", method = RequestMethod.PUT)
+    public @ResponseBody ResponseEntity updateToDo(@PathVariable("id") long id, @RequestBody ToDo input, Principal principal) {
+        log.info("Updating ToDo " + id);
+        ToDo todo = todoRepo.findById(id);
+        if (isAuthorized(todo, principal)) {
+            log.info(input.toString());
             return new ResponseEntity(HttpStatus.OK);
         } else {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);

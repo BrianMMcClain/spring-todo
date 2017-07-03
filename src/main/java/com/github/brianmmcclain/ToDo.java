@@ -36,4 +36,6 @@ public class ToDo {
     public long getId() { return this.id; }
 
     public User getOwner() { return this.list.getUser(); }
+
+    public void setList(ToDoList list) { this.list = list; }
 }
