@@ -28,6 +28,8 @@ public class ToDoList {
         return this.user;
     }
 
+    public void setUser(User user) { this.user = user; }
+
     public List<ToDo> getToDos() { return this.todos; }
 
     public ToDoList() {}
