@@ -70,6 +70,7 @@
 	        _this.loadState = _this.loadState.bind(_this);
 	        _this.deleteToDo = _this.deleteToDo.bind(_this);
 	        _this.deleteList = _this.deleteList.bind(_this);
+	        _this.updateCompletedStatus = _this.updateCompletedStatus.bind(_this);
 	        return _this;
 	    }
 	
@@ -78,8 +79,18 @@
 	        value: function loadState() {
 	            var _this2 = this;
 	
-	            client({ method: 'GET', path: '/api/lists' }).done(function (response) {
-	                _this2.setState({ lists: response.entity });
+	            // client({method: 'GET', path: '/api/lists'}).done(response => {
+	            //     this.setState({lists: response.entity});
+	            // });
+	
+	            fetch('/api/lists', {
+	                method: 'GET',
+	                credentials: 'same-origin'
+	            }).then(function (response) {
+	                return response.json();
+	            }).then(function (json) {
+	                console.log(json);
+	                _this2.setState({ lists: json });
 	            });
 	        }
 	    }, {
@@ -106,9 +117,19 @@
 	            this.loadState();
 	        }
 	    }, {
+	        key: 'updateCompletedStatus',
+	        value: function updateCompletedStatus(e) {
+	            console.log(e.target.checked);
+	            console.log(e.target.name);
+	
+	            client({ method: 'PUT', path: "api/todos/" + e.target.name }).done(function (response) {
+	                console.log(response.entity);
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return React.createElement(ToDoListList, { lists: this.state.lists, deleteToDo: this.deleteToDo, deleteList: this.deleteList });
+	            return React.createElement(ToDoListList, { lists: this.state.lists, deleteToDo: this.deleteToDo, deleteList: this.deleteList, updateCompletedStatus: this.updateCompletedStatus });
 	        }
 	    }]);
 	
@@ -130,7 +151,7 @@
 	            var _this4 = this;
 	
 	            var lists = this.props.lists.map(function (list) {
-	                return React.createElement(ToDoList, { key: list.id, list: list, deleteToDo: _this4.props.deleteToDo, deleteList: _this4.props.deleteList });
+	                return React.createElement(ToDoList, { key: list.id, list: list, deleteToDo: _this4.props.deleteToDo, deleteList: _this4.props.deleteList, updateCompletedStatus: _this4.props.updateCompletedStatus });
 	            });
 	            return React.createElement(
 	                'div',
@@ -149,7 +170,7 @@
 	        var _this5 = this;
 	
 	        var todos = this.props.list.toDos.map(function (todo) {
-	            return React.createElement(ToDo, { key: todo.id, todo: todo, deleteToDo: _this5.props.deleteToDo });
+	            return React.createElement(ToDo, { key: todo.id, todo: todo, deleteToDo: _this5.props.deleteToDo, updateCompletedStatus: _this5.props.updateCompletedStatus });
 	        });
 	        console.log(this.props);
 	        return React.createElement(
@@ -203,7 +224,7 @@
 	                'td',
 	                null,
 	                ' ',
-	                React.createElement('input', { type: 'checkbox', name: this.props.todo.id + "_completed", value: '', defaultChecked: this.props.todo.completed }),
+	                React.createElement('input', { type: 'checkbox', name: this.props.todo.id + "", value: '', defaultChecked: this.props.todo.completed, onChange: this.props.updateCompletedStatus }),
 	                ' '
 	            ),
 	            React.createElement(

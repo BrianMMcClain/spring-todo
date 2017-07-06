@@ -10,11 +10,17 @@ class App extends React.Component {
         this.loadState = this.loadState.bind(this);
         this.deleteToDo = this.deleteToDo.bind(this);
         this.deleteList = this.deleteList.bind(this);
+        this.updateCompletedStatus = this.updateCompletedStatus.bind(this);
     }
 
     loadState() {
-        client({method: 'GET', path: '/api/lists'}).done(response => {
-            this.setState({lists: response.entity});
+        fetch('/api/lists', {
+            method: 'GET',
+            credentials: 'same-origin'
+        }).then(response => {
+            return response.json();
+        }).then(json => {
+            this.setState({lists: json});
         });
     }
 
@@ -38,9 +44,18 @@ class App extends React.Component {
         this.loadState();
     }
 
+    updateCompletedStatus(e) {
+        console.log(e.target.checked);
+        console.log(e.target.name);
+
+        client({method: 'PUT', path: "api/todos/" + e.target.name}).done(response => {
+            console.log(response.entity);
+        });
+    }
+
     render() {
         return (
-            <ToDoListList lists={this.state.lists} deleteToDo={this.deleteToDo} deleteList={this.deleteList} />
+            <ToDoListList lists={this.state.lists} deleteToDo={this.deleteToDo} deleteList={this.deleteList} updateCompletedStatus={this.updateCompletedStatus} />
     )
     }
 }
@@ -48,7 +63,7 @@ class App extends React.Component {
 class ToDoListList extends React.Component{
     render() {
         var lists = this.props.lists.map(list =>
-            <ToDoList key={list.id} list={list} deleteToDo={this.props.deleteToDo} deleteList={this.props.deleteList} />
+            <ToDoList key={list.id} list={list} deleteToDo={this.props.deleteToDo} deleteList={this.props.deleteList} updateCompletedStatus={this.props.updateCompletedStatus} />
         );
         return (
             <div>{lists}</div>
@@ -59,7 +74,7 @@ class ToDoListList extends React.Component{
 var ToDoList = React.createClass({
     render() {
         var todos = this.props.list.toDos.map(todo =>
-                <ToDo key={todo.id} todo={todo} deleteToDo={this.props.deleteToDo} />
+                <ToDo key={todo.id} todo={todo} deleteToDo={this.props.deleteToDo} updateCompletedStatus={this.props.updateCompletedStatus} />
         );
         console.log(this.props);
         return (
@@ -85,7 +100,7 @@ var ToDo = React.createClass({
     render() {
         return (
             <tr>
-                <td> <input type="checkbox" name={this.props.todo.id + "_completed"} value="" defaultChecked={this.props.todo.completed} /> </td>
+                <td> <input type="checkbox" name={this.props.todo.id + ""} value="" defaultChecked={this.props.todo.completed} onChange={this.props.updateCompletedStatus} /> </td>
                 <td>{this.props.todo.description}</td>
                 <td><button key={this.props.todo.id} value={this.props.todo.id} type="button" className="btn btn-danger" onClick={this.props.deleteToDo}>Delete</button></td>
             </tr>
