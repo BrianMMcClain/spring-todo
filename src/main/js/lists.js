@@ -1,6 +1,5 @@
 const React = require('react');
 const ReactDOM = require('react-dom')
-const client = require('./client');
 
 class App extends React.Component {
 
@@ -29,16 +28,19 @@ class App extends React.Component {
     }
 
     deleteToDo(e) {
-        client({method: 'DELETE', path: "/api/todos/" + e.target.value}).done(response => {
-            console.log(response.entity);
+        fetch("/api/todos/" + e.target.value, {
+            method: 'DELETE',
+            credentials: 'same-origin'
         });
 
         this.loadState();
     }
 
     deleteList(e) {
-        client({method: 'DELETE', path: "/api/lists/" + e.target.value}).done(response => {
-            console.log(response.entity);
+
+        fetch("/api/lists/" + e.target.value, {
+            method: 'DELETE',
+            credentials: 'same-origin'
         });
 
         this.loadState();
@@ -47,10 +49,6 @@ class App extends React.Component {
     updateCompletedStatus(e) {
         console.log(e.target.checked);
         console.log(e.target.name);
-
-        client({method: 'PUT', path: "api/todos/" + e.target.name}).done(response => {
-            console.log(response.entity);
-        });
     }
 
     render() {
